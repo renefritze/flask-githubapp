@@ -106,25 +106,18 @@ class GitHubApp(object):
 
     def installation_client(self, installation_id):
         """GitHub client authenticated as GitHub app installation"""
-        try:
-            return self._installation_clients[installation_id]
-        except KeyError:
-            client = self.client
-            client.login_as_app_installation(self.key,
-                                             self.id,
-                                             installation_id)
-            self._installation_clients[installation_id] = client
-            return self._installation_clients[installation_id]
+        client = self.client
+        client.login_as_app_installation(self.key,
+                                         self.id,
+                                         installation_id)
+        return client
 
-    @property
     def app_client(self):
         """GitHub client authenticated as GitHub app"""
-        if not hasattr(self, 'githubapp_app'):
-            client = self.client
-            client.login_as_app(self.key,
-                                self.id)
-            self.githubapp_app = client
-        return self.githubapp_app
+        client = self.client
+        client.login_as_app(self.key,
+                            self.id)
+        return client
 
     @property
     def installation_token(self):
